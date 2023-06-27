@@ -22,30 +22,40 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
 fi
 
 slug="$1"
-solution_dir=$(realpath "${2%/}")
+relative_solution_dir="$2/"
 output_dir=$(realpath "${3%/}")
+relative_test_file="${relative_solution_dir}/${slug}-test.arr"
 results_file="${output_dir}/results.json"
 
 # Create the output directory if it doesn't exist
 mkdir -p "${output_dir}"
-
 echo "${slug}: testing..."
-
 # Run the tests for the provided implementation file and redirect stdout and
 # stderr to capture it
-test_output=$(false)
-# TODO: substitute "false" with the actual command to run the test:
-# test_output=$(command_to_run_tests 2>&1)
 
-# Write the results.json file based on the exit code of the command that was 
+#pyret
+test_output=$(pyret -q "${relative_test_file}" 2>&1)
+# test_output=$(pyret "${relative_test_file}" 2>&1)
+# Write the results.json file based on the exit code of the command that was
 # just executed that tested the implementation file
-if [ $? -eq 0 ]; then
+
+# pyret reports 0 for a syntax error or empty file
+success=$(echo "${test_output}" | grep -c -E 'Looks shipshape, all [0-9]+ test[s]* passed')
+error=$(echo "${test_output}" | grep -c -E "Pyret didn't understand your program")
+if [[ $success -gt 0 ]]; then
+    #echo "${test_output}"
     jq -n '{version: 1, status: "pass"}' > ${results_file}
 else
     # OPTIONAL: Sanitize the output
     # In some cases, the test output might be overly verbose, in which case stripping
     # the unneeded information can be very helpful to the student
     # sanitized_test_output=$(printf "${test_output}" | sed -n '/Test results:/,$p')
+    sanitized_test_output=$(echo "${test_output}" | sed -E 's|.*/([^/]*):|\1:|; /^[[:space:]]*$/d')
+
+    status="fail"
+    if [[ $error -gt 0 ]]; then
+        status="error"
+    fi
 
     # OPTIONAL: Manually add colors to the output to help scanning the output for errors
     # If the test output does not contain colors to help identify failing (or passing)
@@ -53,8 +63,9 @@ else
     # colorized_test_output=$(echo "${test_output}" \
     #      | GREP_COLOR='01;31' grep --color=always -E -e '^(ERROR:.*|.*failed)$|$' \
     #      | GREP_COLOR='01;32' grep --color=always -E -e '^.*passed$|$')
-
-    jq -n --arg output "${test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
+    # jq -n --arg output "${test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
+    jq -n --arg output "${sanitized_test_output}" --arg status "${status}" '{version: 1, status: $status, message: $output}' > ${results_file}
 fi
 
+# delete test jar
 echo "${slug}: done"
