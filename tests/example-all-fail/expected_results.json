@@ -1,5 +1,5 @@
 {
   "version": 1,
   "status": "fail",
-  "message": "TODO: replace with correct output"
+  "message": "example-all-fail-test.arr:3:0-5:3: year not divisible by 4 in common year (0/1) \n  line 4, column 2: failed because: \n    Values not equal \"foo\" true\nexample-all-fail-test.arr:7:0-9:3: year divisible by 2, not divisible by 4 in common year (0/1) \n  line 8, column 2: failed because: \n    Values not equal \"foo\" true\nPassed: 0; Failed: 2; Ended in Error: 0; Total: 2"
 }
