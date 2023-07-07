@@ -12,4 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run test-runner
-        run: docker-compose run pyret-test-runner
+        run: docker-compose run test-runner
