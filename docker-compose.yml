@@ -2,7 +2,7 @@ version: '3'
 
 services:
   test-runner:
-    image: exercism/pyret-test-runner
+    image: exercism/test-runner
     working_dir: /opt/test-runner
     entrypoint: /opt/test-runner/bin/run-tests.sh
     volumes:
