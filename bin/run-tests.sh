@@ -21,7 +21,7 @@ for test_dir in tests/*; do
     relative_test_dir="tests/${test_dir_name}/"
 
     current_dir=$(pwd)
-    bin/run.sh "${test_dir_name}" "${relative_test_dir}" "${relative_test_dir}"
+    run.sh "${test_dir_name}" "${relative_test_dir}" "${relative_test_dir}"
     cd "${current_dir}"
     # OPTIONAL: Normalize the results file
     # If the results.json file contains information that changes between
