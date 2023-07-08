@@ -33,4 +33,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          ./bin/run-tests-in-docker.sh
+          ./bin/run-tests.sh
