@@ -31,6 +31,4 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Tests
-        run: |
-          ./bin/run-tests.sh
+      - name: Run Tests in Docker
