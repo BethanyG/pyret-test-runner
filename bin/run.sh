@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 # Synopsis:
 # Run the test runner on a solution.
