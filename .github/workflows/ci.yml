@@ -30,7 +30,8 @@ jobs:
           tags: exercism/test-runner
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max
 
       - name: Run Tests in Docker
-          run: |
-            ./bin/run-tests.sh
+        run: |
+          ./bin/run-tests.sh
